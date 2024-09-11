@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Game page</title>
+</head>
+<body>
+<h1 th:text="${game.title}"></h1>
+
+<table>
+    <tr>
+        <th>Year</th>
+        <th>Rating</th>
+        <th>Cost</th>
+    </tr>
+        <td th:text="${game.year}"></td>
+        <td th:text="${game.rating}"></td>
+        <td th:text="${game.cost}"></td>
+</table>
+
+<p><a th:href="@{/}">Home</a> </p>
+
+</body>
+</html>
