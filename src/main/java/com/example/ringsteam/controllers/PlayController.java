@@ -1,13 +1,11 @@
 package com.example.ringsteam.controllers;
 
 import com.example.ringsteam.models.Game;
-import com.example.ringsteam.models.Play;
 import com.example.ringsteam.services.GameService;
 import com.example.ringsteam.services.PlayService;
-import com.example.ringsteam.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -23,30 +21,20 @@ public class PlayController {
     @Autowired
     private GameService gameService;
 
-    @Autowired
-    private UserService userService;
-
     //Lista dei giochi di uno specifico utente
     @GetMapping("users/{idUser}/games")
-    public List<Game> getAllGameUser(@PathVariable long idUser, Model model){
+    public ResponseEntity<List<Game>> getAllGameUser(@PathVariable long idUser){
         List<Game> gameList = new ArrayList<>();
         playService.getAllGameUser(idUser).forEach(game -> { gameList.add(gameService.getGame(game.getIdgame())); } );
-        return gameList;
-//        model.addAttribute("games", gameList);
-//        model.addAttribute("nameuser", userService.getUser(idUser).getUsername());
-//        return "usergameslist";
+        return new ResponseEntity<>(gameList, HttpStatus.OK);
     }
 
     //Lista dei giochi con cui uno specifio utente ha giocato
     @GetMapping("users/{idUser}/playedgames")
-    public List<Game> getPlayedGameUser(@PathVariable long idUser, Model model){
+    public ResponseEntity<List<Game>> getPlayedGameUser(@PathVariable long idUser){
         List<Game> playedGameList = new ArrayList<>();
         playService.getAllGameUserPlayed(idUser).forEach(game -> { playedGameList.add(gameService.getGame(game.getIdgame())); } );
-        return playedGameList;
-//        model.addAttribute("games", playedGameList);
-//        model.addAttribute("nameuser", userService.getUser(idUser).getUsername());
-//        model.addAttribute("play", new Play());
-//        return "usergameslist";
+        return new ResponseEntity<>(playedGameList, HttpStatus.OK);
     }
 
     //Aggiunta di un gioco per uno specifico utente

@@ -2,8 +2,6 @@ package com.example.ringsteam.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import com.example.ringsteam.models.Game;
 import com.example.ringsteam.services.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,17 +17,13 @@ public class GameController {
     private GameService gameService;
 
     @GetMapping("/games")
-    public ResponseEntity<List<Game>> getAllGame(Model model) {
+    public ResponseEntity<List<Game>> getAllGame() {
         return new ResponseEntity<>(gameService.getAllGames(), HttpStatus.OK);
-//        model.addAttribute("games", gameService.getAllGames());
-//        return "gameslist";
     }
 
     @GetMapping("/games/{id}")
-    public Game getGame(@PathVariable long id, Model model) {
-        return gameService.getGame(id);
-//        model.addAttribute("game", gameService.getGame(id));
-//        return "gamepage";
+    public ResponseEntity<Game> getGame(@PathVariable long id) {
+        return new ResponseEntity<>(gameService.getGame(id), HttpStatus.OK);
     }
 
     @PostMapping("/games")

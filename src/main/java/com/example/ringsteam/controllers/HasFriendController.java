@@ -1,10 +1,11 @@
 package com.example.ringsteam.controllers;
 
-import com.example.ringsteam.models.HasFriendID;
 import com.example.ringsteam.models.User;
 import com.example.ringsteam.services.HasFriendService;
 import com.example.ringsteam.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -22,10 +23,10 @@ public class HasFriendController {
 
     //Lista degli amici di un utente
     @GetMapping("users/{idUser}/friends")
-    public List<User> getAllFriends(@PathVariable long idUser) {
+    public ResponseEntity<List<User>> getAllFriends(@PathVariable long idUser) {
         List<User> friends = new ArrayList<>();
         hasFriendService.getAllFriends(idUser).forEach(friend -> { friends.add(userService.getUser(friend.getIdfriend())); } );
-        return friends;
+        return new ResponseEntity<>(friends, HttpStatus.OK);
     }
 
     //Aggiungi un amico
