@@ -1,5 +1,7 @@
 package com.example.ringsteam.controllers;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import com.example.ringsteam.models.Game;
@@ -17,8 +19,8 @@ public class GameController {
     private GameService gameService;
 
     @GetMapping("/games")
-    public List<Game> getAllGame(Model model) {
-        return gameService.getAllGames();
+    public ResponseEntity<List<Game>> getAllGame(Model model) {
+        return new ResponseEntity<>(gameService.getAllGames(), HttpStatus.OK);
 //        model.addAttribute("games", gameService.getAllGames());
 //        return "gameslist";
     }
