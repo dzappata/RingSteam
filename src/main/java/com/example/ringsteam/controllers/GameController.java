@@ -26,7 +26,7 @@ public class GameController {
         return new ResponseEntity<>(gameService.getGame(id), HttpStatus.OK);
     }
 
-    @PostMapping("/games")
+    @PostMapping("/games/addnew")
     public void createGame(@RequestBody Game game) {
         gameService.addGame(game);
     }
