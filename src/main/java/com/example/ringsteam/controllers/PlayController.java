@@ -43,7 +43,7 @@ public class PlayController {
         playService.addGameUser(idUser,idGame);
     }
 
-    //Ore totali di gioco per singolo utente
+    //Ore totali di gioco per singolo utente ad un signolo gioco
     @GetMapping("/users/{idUser}/{idGame}/totalhours")
     public ResponseEntity<Double> getUserHoursGame(@PathVariable long idUser, @PathVariable long idGame){
         return new ResponseEntity<>(playService.getUserHoursGame(idUser,idGame), HttpStatus.OK);
