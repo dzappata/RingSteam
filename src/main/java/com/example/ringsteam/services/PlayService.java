@@ -1,6 +1,8 @@
 package com.example.ringsteam.services;
 
 import com.example.ringsteam.exceptions.PlayNotFoundException;
+import com.example.ringsteam.models.HasFriend;
+import com.example.ringsteam.models.HasFriendID;
 import com.example.ringsteam.models.Play;
 import com.example.ringsteam.models.PlayID;
 import com.example.ringsteam.repositories.PlayRepository;
@@ -17,8 +19,18 @@ public class PlayService {
 
     //Aggiunta di un gioco per uno specifico utente
     public void addGameUser(long idUser, long idGame) {
-        Play newGameUser = new Play(idUser,idGame,0);
-        playRepository.save(newGameUser);
+//        Play newGameUser = new Play(idUser,idGame,0);
+//        playRepository.save(newGameUser);
+        PlayID idPlay = new PlayID(idUser,idGame);
+
+        if (!playRepository.existsById(idPlay)) {
+            Play addedgame = new Play(idUser, idGame,0);
+            playRepository.save(addedgame);
+        }
+        else
+        {
+            throw new RuntimeException("Game already added");
+        }
     }
 
     //Ore totali di gioco per singolo utente
