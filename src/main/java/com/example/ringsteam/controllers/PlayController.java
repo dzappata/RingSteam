@@ -45,8 +45,8 @@ public class PlayController {
 
     //Ore totali di gioco per singolo utente
     @GetMapping("/users/{idUser}/{idGame}/totalhours")
-    public double getTotalHoursGame(@PathVariable long idUser, @PathVariable long idGame){
-        return  playService.getUserHoursGame(idUser,idGame);
+    public ResponseEntity<Double> getUserHoursGame(@PathVariable long idUser, @PathVariable long idGame){
+        return new ResponseEntity<>(playService.getUserHoursGame(idUser,idGame), HttpStatus.OK);
     }
 
     //Modifica del numero di ore di gioco di un utente per un gioco specifico
@@ -57,7 +57,7 @@ public class PlayController {
 
     //Statistiche di ore totali per ogni gioco
     @GetMapping("games/{idGame}/totalhours")
-    public double getTotalHoursGame(@PathVariable long idGame){
-        return  playService.getTotalHoursGame(idGame);
+    public ResponseEntity<Double> getTotalHoursGame(@PathVariable long idGame){
+        return new ResponseEntity<>(playService.getTotalHoursGame(idGame), HttpStatus.OK);
     }
 }

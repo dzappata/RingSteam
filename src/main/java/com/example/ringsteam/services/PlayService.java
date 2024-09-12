@@ -23,7 +23,7 @@ public class PlayService {
 
     //Ore totali di gioco per singolo utente
     public double getUserHoursGame(long idUser, long idGame) {
-        return playRepository.getUserTotalHoursGame(idUser,idGame);
+        return playRepository.getUserHoursGame(idUser,idGame);
     }
 
     //Lista dei giochi di uno specifico utente

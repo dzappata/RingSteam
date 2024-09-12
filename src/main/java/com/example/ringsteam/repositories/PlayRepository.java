@@ -20,14 +20,14 @@ public interface PlayRepository extends JpaRepository<Play, PlayID> {
     List<Play> findPlayedGamesByIdUser(long idUser);
 
     @Query(
-            value = "Select SUM(p.totalhours) from play p where p.idgame=?1",
+            value = "Select coalesce(SUM(p.totalhours),0) from play p where p.idgame=?1",
             nativeQuery = true)
     double getTotalHoursGame(long idGame);
 
     @Query(
-            value = "Select p.totalhours from play p where p.iduser=?2 and p.idgame=?1",
+            value = "Select coalesce(SUM(p.totalhours),0) from play p where p.iduser=?2 and p.idgame=?1",
             nativeQuery = true)
-    double getUserTotalHoursGame(long idUser, long idGame);
+    double getUserHoursGame(long idUser, long idGame);
 
 
 
