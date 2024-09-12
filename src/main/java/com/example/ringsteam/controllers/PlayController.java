@@ -43,6 +43,12 @@ public class PlayController {
         playService.addGameUser(idUser,idGame);
     }
 
+    //Ore totali di gioco per singolo utente
+    @GetMapping("/users/{idUser}/{idGame}/totalhours")
+    public double getTotalHoursGame(@PathVariable long idUser, @PathVariable long idGame){
+        return  playService.getUserHoursGame(idUser,idGame);
+    }
+
     //Modifica del numero di ore di gioco di un utente per un gioco specifico
     @PutMapping("users/{idUser}/{idGame}/edithours")
     public void editHoursPlayed(@PathVariable long idUser, @PathVariable long idGame, @RequestParam("hours") double hours){

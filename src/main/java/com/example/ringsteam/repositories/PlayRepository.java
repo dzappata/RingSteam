@@ -24,6 +24,11 @@ public interface PlayRepository extends JpaRepository<Play, PlayID> {
             nativeQuery = true)
     double getTotalHoursGame(long idGame);
 
+    @Query(
+            value = "Select p.totalhours from play p where p.iduser=?2 and p.idgame=?1",
+            nativeQuery = true)
+    double getUserTotalHoursGame(long idUser, long idGame);
+
 
 
 }

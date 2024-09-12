@@ -21,6 +21,11 @@ public class PlayService {
         playRepository.save(newGameUser);
     }
 
+    //Ore totali di gioco per singolo utente
+    public double getUserHoursGame(long idUser, long idGame) {
+        return playRepository.getUserTotalHoursGame(idUser,idGame);
+    }
+
     //Lista dei giochi di uno specifico utente
     public List<Play> getAllGameUser(long idUser) {
         return playRepository.findPlayByIduser(idUser);
@@ -34,7 +39,7 @@ public class PlayService {
     //Modifica del numero di ore di gioco di un utente per un gioco specifico
     public void editHoursPlayed(long idUser, long idGame, double hours) {
         PlayID idPlay = new PlayID(idUser,idGame);
-        Play editPlay=playRepository.findById(idPlay).orElseThrow(()-> new PlayNotFoundException());
+        Play editPlay=playRepository.findById(idPlay).orElseThrow(PlayNotFoundException::new);
 
         editPlay.setTotalhours(hours);
         playRepository.save(editPlay);
