@@ -30,14 +30,14 @@ public class HasFriendController {
     }
 
     //Aggiungi un amico
-    @PostMapping("users/{idUser}/addfriend")
-    public void addFriend(@PathVariable long idUser, @RequestParam("idfriend") long idfriend) {
-        hasFriendService.addFriend(idUser, idfriend);
+    @PostMapping("users/{idUser}/{idFriend}/addfriend")
+    public void addFriend(@PathVariable long idUser, @PathVariable long idFriend) {
+        hasFriendService.addFriend(idUser, idFriend);
     }
 
     //Cancella un amico
-    @DeleteMapping("users/{idUser}/delfriend")
-    public void deleteFriend(@PathVariable long idUser, @RequestParam("idfriend") long idfriend) {
-        hasFriendService.deleteFriend(idUser, idfriend);
+    @DeleteMapping("users/{idUser}/{idFriend}/delfriend")
+    public void deleteFriend(@PathVariable long idUser, @PathVariable long idFriend) {
+        hasFriendService.deleteFriend(idUser, idFriend);
     }
 }
