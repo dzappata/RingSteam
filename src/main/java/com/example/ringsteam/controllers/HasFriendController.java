@@ -1,6 +1,6 @@
 package com.example.ringsteam.controllers;
 
-import com.example.ringsteam.models.User;
+import com.example.ringsteam.models.UserSteam;
 import com.example.ringsteam.services.HasFriendService;
 import com.example.ringsteam.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:4200")
 public class HasFriendController {
 
     @Autowired
@@ -23,8 +23,8 @@ public class HasFriendController {
 
     //Lista degli amici di un utente
     @GetMapping("users/{idUser}/friends")
-    public ResponseEntity<List<User>> getAllFriends(@PathVariable long idUser) {
-        List<User> friends = new ArrayList<>();
+    public ResponseEntity<List<UserSteam>> getAllFriends(@PathVariable long idUser) {
+        List<UserSteam> friends = new ArrayList<>();
         hasFriendService.getAllFriends(idUser).forEach(friend -> { friends.add(userService.getUser(friend.getIdfriend())); } );
         return new ResponseEntity<>(friends, HttpStatus.OK);
     }

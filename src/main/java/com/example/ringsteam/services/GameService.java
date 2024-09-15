@@ -1,7 +1,6 @@
 package com.example.ringsteam.services;
 
 import com.example.ringsteam.exceptions.GameNotFoundException;
-import com.example.ringsteam.exceptions.UserNotFoundException;
 import com.example.ringsteam.models.Game;
 import com.example.ringsteam.repositories.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
