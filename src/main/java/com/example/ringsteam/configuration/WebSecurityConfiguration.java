@@ -1,4 +1,4 @@
-package com.example.ringsteam.security;
+package com.example.ringsteam.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +16,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class WebSecurityConfiguration {
 
     @Bean
@@ -26,12 +27,6 @@ public class WebSecurityConfiguration {
                         .anyRequest().authenticated())
                         .csrf(AbstractHttpConfigurer::disable).build();
     }
-
-//    return security
-//            .authorizeHttpRequests((requests) -> requests
-//            .requestMatchers("/", "/signup", "/login").permitAll()
-//                        .anyRequest().authenticated())
-//            .build();
 
     @Bean
     public PasswordEncoder passwordEncoder() {
