@@ -46,7 +46,7 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         //Fetch user from DB
         UserSteam user = userRepository.findUserSteamByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Customer not found with username: " + username));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
 
         return new User(user.getUsername(), user.getPassword(), Collections.emptyList());
     }
