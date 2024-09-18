@@ -9,6 +9,7 @@ public class UserSteam {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private long id;
+    @Column(unique=true)
     private String username;
     private String emailaddress;
     private String phonenumber;

@@ -8,6 +8,8 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -17,8 +19,14 @@ import java.util.Optional;
 @Service
 public class UserService implements UserDetailsService {
 
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
     @Autowired
-    private UserRepository userRepository;
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = new BCryptPasswordEncoder();
+    }
 
     public List<UserSteam> getAllUsers() {
         return userRepository.findAll();
@@ -42,12 +50,20 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
+    public Optional<UserSteam> findByUsername(String username) {
+        return Optional.ofNullable(userRepository.findByUsername(username));
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        //Fetch user from DB
-        UserSteam user = userRepository.findUserSteamByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
-
-        return new User(user.getUsername(), user.getPassword(), Collections.emptyList());
+        UserSteam user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
+        return org.springframework.security.core.userdetails.User
+                .withUsername(user.getUsername())
+                .password(user.getPassword())
+                .authorities("USER")
+                .build();
     }
 }
