@@ -1,10 +1,10 @@
 package com.example.ringsteam.dto;
 
-public class SignupRequest {
+public class LoginRequest {
 
     private String username;
+
     private String password;
-    private String emailaddress;
 
     public String getUsername() {
         return username;
@@ -20,13 +20,5 @@ public class SignupRequest {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getEmailaddress() {
-        return emailaddress;
-    }
-
-    public void setEmail(String emailaddress) {
-        this.emailaddress = emailaddress;
     }
 }
