@@ -19,8 +19,6 @@ public class PlayService {
 
     //Aggiunta di un gioco per uno specifico utente
     public void addGameUser(long idUser, long idGame) {
-//        Play newGameUser = new Play(idUser,idGame,0);
-//        playRepository.save(newGameUser);
         PlayID idPlay = new PlayID(idUser,idGame);
 
         if (!playRepository.existsById(idPlay)) {
