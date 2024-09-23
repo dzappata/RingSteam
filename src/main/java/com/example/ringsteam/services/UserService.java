@@ -14,15 +14,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserService implements UserDetailsService {
+public class UserService  {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
     public List<UserSteam> getAllUsers() {
@@ -48,19 +46,7 @@ public class UserService implements UserDetailsService {
     }
 
     public Optional<UserSteam> findByUsername(String username) {
-        return Optional.ofNullable(userRepository.findByUsername(username));
+        return userRepository.findByUsername(username);
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserSteam user = userRepository.findByUsername(username);
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found");
-        }
-        return org.springframework.security.core.userdetails.User
-                .withUsername(user.getUsername())
-                .password(user.getPassword())
-                .authorities("USER")
-                .build();
-    }
 }
