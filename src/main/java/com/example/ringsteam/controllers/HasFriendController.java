@@ -15,11 +15,14 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:4200")
 public class HasFriendController {
 
-    @Autowired
-    private HasFriendService hasFriendService;
+    private final HasFriendService hasFriendService;
+    private final UserService userService;
 
     @Autowired
-    private UserService userService;
+    public HasFriendController(HasFriendService hasFriendService, UserService userService) {
+        this.hasFriendService = hasFriendService;
+        this.userService = userService;
+    }
 
     //Lista degli amici di un utente
     @GetMapping("users/{idUser}/friends")

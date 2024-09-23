@@ -1,8 +1,6 @@
 package com.example.ringsteam.services;
 
 import com.example.ringsteam.exceptions.PlayNotFoundException;
-import com.example.ringsteam.models.HasFriend;
-import com.example.ringsteam.models.HasFriendID;
 import com.example.ringsteam.models.Play;
 import com.example.ringsteam.models.PlayID;
 import com.example.ringsteam.repositories.PlayRepository;
@@ -14,8 +12,12 @@ import java.util.List;
 @Service
 public class PlayService {
 
+    private final PlayRepository playRepository;
+
     @Autowired
-    private PlayRepository playRepository;
+    public PlayService(PlayRepository playRepository) {
+        this.playRepository = playRepository;
+    }
 
     //Aggiunta di un gioco per uno specifico utente
     public void addGameUser(long idUser, long idGame) {

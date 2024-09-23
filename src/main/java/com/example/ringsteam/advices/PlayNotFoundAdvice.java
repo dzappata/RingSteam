@@ -1,7 +1,6 @@
 package com.example.ringsteam.advices;
 
 import com.example.ringsteam.exceptions.PlayNotFoundException;
-import com.example.ringsteam.exceptions.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;

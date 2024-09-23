@@ -15,11 +15,14 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:4200")
 public class PlayController {
 
-    @Autowired
-    private PlayService playService;
+    private final PlayService playService;
+    private final GameService gameService;
 
     @Autowired
-    private GameService gameService;
+    public PlayController(PlayService playService, GameService gameService) {
+        this.playService = playService;
+        this.gameService = gameService;
+    }
 
     //Lista dei giochi di uno specifico utente
     @GetMapping("users/{idUser}/games")

@@ -13,11 +13,14 @@ import java.util.List;
 @Service
 public class HasFriendService {
 
-    @Autowired
-    private HasFriendRepository hasFriendRepository;
+    private final HasFriendRepository hasFriendRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    public HasFriendService(HasFriendRepository hasFriendRepository, UserRepository userRepository) {
+        this.hasFriendRepository = hasFriendRepository;
+        this.userRepository = userRepository;
+    }
 
     //Lista degli amici di un utente
     public List<HasFriend> getAllFriends(long idUser) {

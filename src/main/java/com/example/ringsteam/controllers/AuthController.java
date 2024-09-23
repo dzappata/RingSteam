@@ -6,24 +6,23 @@ import com.example.ringsteam.dto.SignupRequest;
 import com.example.ringsteam.dto.SignupResponse;
 import com.example.ringsteam.models.UserSteam;
 import com.example.ringsteam.services.AuthService;
+import com.example.ringsteam.services.JwtTokenService;
+import com.example.ringsteam.services.JwtUserDetailsService;
 import com.example.ringsteam.services.UserService;
-import com.example.ringsteam.util.JwtUtils;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
@@ -31,14 +30,16 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
     private final AuthService authService;
-    private final JwtUtils jwtUtils;
+    private final JwtTokenService jwtTokenService;
+    private final JwtUserDetailsService jwtUserDetailsService;
 
     @Autowired
-    public AuthController(AuthenticationManager authenticationManager, UserService userService, AuthService authService, JwtUtils jwtUtils) {
+    public AuthController(AuthenticationManager authenticationManager, UserService userService, AuthService authService, JwtTokenService jwtTokenService, JwtUserDetailsService jwtUserDetailsService) {
         this.authenticationManager = authenticationManager;
         this.userService = userService;
         this.authService = authService;
-        this.jwtUtils = jwtUtils;
+        this.jwtTokenService = jwtTokenService;
+        this.jwtUserDetailsService = jwtUserDetailsService;
     }
 
     @PostMapping("/register")
@@ -53,32 +54,18 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(HttpServletRequest request, @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> authenticateUser(@RequestBody @Valid final LoginRequest authenticationRequest) {
         try {
-
-            // Authenticate the user
-            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-            SecurityContext securityContext = SecurityContextHolder.getContext();
-            securityContext.setAuthentication(authentication);
-
-            // Create a new session and add the security context.
-            HttpSession session = request.getSession(true);
-            session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
-
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            String jwt = jwtUtils.generateToken(userDetails);
-            UserSteam userLogged = userService.findByUsername(loginRequest.getUsername()).get();
-            LoginResponse loginResponse= new LoginResponse(jwt,userLogged.getUsername(),userLogged.getId());
-            return ResponseEntity.ok(loginResponse);
-        } catch (AuthenticationException e) {
-            return ResponseEntity.status(401).body("Invalid username or password");
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                    authenticationRequest.getUsername(), authenticationRequest.getPassword()));
+        } catch (final BadCredentialsException ex) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
-    }
 
-    @PostMapping("/logout")
-    public ResponseEntity<String> logout(){
-        SecurityContextHolder.clearContext();
-        return new ResponseEntity<String>("Logout Successfully!", HttpStatus.OK);
+        final UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+        UserSteam userLogged = userService.findByUsername(authenticationRequest.getUsername()).get();
+        final LoginResponse authenticationResponse = new LoginResponse(jwtTokenService.generateToken(userDetails),userLogged.getUsername(),userLogged.getId());
+        return ResponseEntity.ok(authenticationResponse);
     }
 
 }
